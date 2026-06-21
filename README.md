@@ -4,13 +4,13 @@
 DocuMind - 智能文档问答系统
 
 ## 项目方向
-🏭 **方向二：企业级应用软件的 Agent 改造**
+🏭 **方向一：Agentic AI原生开发**
 
 ## 项目简介
-基于开源项目 [ask-multiple-pdfs](https://github.com/alejandro-ao/ask-multiple-pdfs) 进行企业级改造，使用 Agentic AI 技术解决企业文档问答场景的痛点。
+基于开源项目 [ask-multiple-pdfs](https://github.com/alejandro-ao/ask-multiple-pdfs) 进行改造，使用 Agentic AI 技术解决文档问答场景的痛点。DocuMind 是一个智能文档问答系统，用户可以上传 PDF 文档，通过自然语言提问获取答案。系统基于 RAG（检索增强生成）架构，使用 DeepSeek API 替代传统的 OpenAI，实现成本降低的同时保持优秀的回答质量。
 
 ### 改造前的问题
-- ❌ 仅支持 OpenAI API，成本高（$0.002/1K tokens）
+- ❌ 仅支持 OpenAI API，成本高
 - ❌ 无法查看答案来源，可信度低
 - ❌ 缺少对话历史管理
 - ❌ 使用简单 Embeddings，检索精度低
@@ -27,6 +27,7 @@ DocuMind - 智能文档问答系统
 - **向量数据库**: FAISS
 - **Embeddings**: 自定义 TF-IDF Embeddings
 - **语言**: Python 3.8+
+- **PDF解析**:PyPDF2 
 
 ## 快速开始
 
@@ -65,6 +66,30 @@ streamlit run app.py
 ```
 
 访问 [http://localhost:8501](http://localhost:8501/)
+
+## 📖 使用指南
+
+### 步骤 1：上传文档
+
+1. 在侧边栏点击「上传 PDF 文件」
+2. 选择一个或多个 PDF 文件
+3. 点击「🚀 处理文档」按钮
+
+### 步骤 2：提问
+
+1. 在主界面输入框输入问题
+2. 按 Enter 键提交
+3. 等待 AI 生成答案
+
+### 步骤 3：查看来源
+
+1. 在 AI 回答下方点击「📚 查看答案来源」
+2. 展开查看引用的文档和具体片段
+
+### 步骤 4：导出对话
+
+1. 在侧边栏找到「💾 导出对话」
+2. 选择 TXT 或 JSON 格式下载
 
 ## 项目目录结构
 
@@ -122,55 +147,45 @@ streamlit run app.py
 - ✅ MVP（已完成）
 - ⏳ Final（进行中）
 
-## 使用示例
-
-### 上传文档
-
-1. 点击侧边栏的 "Browse files"
-2. 选择一个或多个 PDF 文件
-3. 点击 "Process" 按钮
-4. 等待处理完成（会显示提取的字符数和文本块数）
-
-### 提问
-
-在输入框中输入问题，例如：
-
-- "这个文档的主要内容是什么？"
-- "总结一下文档的核心观点"
-- "文档中提到了哪些重要信息？"
-
 ## 技术亮点
 
-### 1. 自定义 TF-IDF Embeddings
+### 1. 成本优化
 
-```
-复制class ImprovedEmbeddings:
-    """改进的 Embeddings，使用 TF-IDF 思想"""
-    
-    def embed_documents(self, texts: List[str]) -> List[List[float]]:
-        # 构建词汇表和 IDF
-        # 使用 TF-IDF 计算向量
-        # 支持中文和英文
-```
+- 从 OpenAI GPT-3.5/4 迁移到 DeepSeek
+- 保持相同的 API 接口
 
-### 2. 更小的文本块
+### 2. 引用来源展示
 
-```
-复制text_splitter = CharacterTextSplitter(
-    separator="\n",
-    chunk_size=500,      # 从 1000 减小到 500
-    chunk_overlap=100,   # 增加重叠
-    length_function=len
-)
-```
+- 显示答案来源的文档名称
+- 显示具体引用的文本片段
+- 提高答案可信度和透明度
 
-### 3. 检索更多相关段落
+### 3. 用户体验优化
 
-```
-复制retriever=vectorstore.as_retriever(
-    search_kwargs={"k": 6}  # 从 4 增加到 6
-)
-```
+- 实时统计面板
+- 对话历史导出
+- 友好的错误提示
+- 响应式界面设计
+
+### 4. 技术创新
+
+- 自定义 TF-IDF Embeddings
+- 元数据追踪系统
+- 高效的向量检索
+
+## 🐛 常见问题
+
+### Q1: 无法提取 PDF 文本？
+
+**A**: 确保 PDF 不是扫描件，系统只支持文本型 PDF。
+
+### Q2: API 调用失败？
+
+**A**: 检查 `.env` 文件中的 API Key 是否正确。
+
+### Q3: 回答不准确？
+
+**A**: 尝试调整 `chunk_size` 和 `chunk_overlap` 参数。
 
 ## 参考资料
 
@@ -196,3 +211,11 @@ MIT License
 
 感谢原项目作者 Alejandro AO 提供的优秀开源项目。
 
+## 📧 联系方式
+
+- **GitHub**: [@zltnb666](https://github.com/zltnb666)
+- **项目地址**: [cs599-project](https://github.com/zltnb666/cs599-project)
+
+------
+
+**⭐ 如果这个项目对你有帮助，请给个 Star！**
